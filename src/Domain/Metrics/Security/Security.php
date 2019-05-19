@@ -9,7 +9,7 @@ use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenSecurityIssues;
 
 final class Security implements HasInsights
 {
-    /*** {@inheritdoc}
+    /* {@inheritdoc}
      */
     public function getInsights(): array
     {

@@ -24,10 +24,10 @@ final class Results
     /**
      * Creates a new instance of results.
      *
-     * @param  \NunoMaduro\PhpInsights\Domain\Collector  $collector
-     * @param  array<string, array<\NunoMaduro\PhpInsights\Domain\Contracts\Insight>>  $perCategoryInsights
+     * @param \NunoMaduro\PhpInsights\Domain\Collector $collector
+     * @param array<string, array<\NunoMaduro\PhpInsights\Domain\Contracts\Insight>> $perCategoryInsights
      */
-    public function __construct(\NunoMaduro\PhpInsights\Domain\Collector $collector, array $perCategoryInsights)
+    public function __construct(Collector $collector, array $perCategoryInsights)
     {
         $this->collector = $collector;
         $this->perCategoryInsights = $perCategoryInsights;
@@ -35,8 +35,6 @@ final class Results
 
     /**
      * Gets the code quality.
-     *
-     * @return float
      */
     public function getCodeQuality(): float
     {
@@ -45,8 +43,6 @@ final class Results
 
     /**
      * Gets the code quality.
-     *
-     * @return float
      */
     public function getComplexity(): float
     {
@@ -62,8 +58,6 @@ final class Results
 
     /**
      * Gets the code quality.
-     *
-     * @return float
      */
     public function getStructure(): float
     {
@@ -72,8 +66,6 @@ final class Results
 
     /**
      * Gets the code quality.
-     *
-     * @return float
      */
     public function getDependencies(): float
     {
@@ -82,8 +74,6 @@ final class Results
 
     /**
      * Gets the style quality.
-     *
-     * @return float
      */
     public function getStyle(): float
     {
@@ -92,8 +82,6 @@ final class Results
 
     /**
      * Gets number of security issues.
-     *
-     * @return int
      */
     public function getTotalSecurityIssues(): int
     {
@@ -108,10 +96,6 @@ final class Results
 
     /**
      * Returns the percentage of the given category.
-     *
-     * @param  string  $category
-     *
-     * @return float
      */
     private function getPercentage(string $category): float
     {

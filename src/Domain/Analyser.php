@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NunoMaduro\PhpInsights\Domain;
 
 use ReflectionMethod;
 use SebastianBergmann\PHPLOC\Analyser as BaseAnalyser;
 
 /**
- * Code originally taken from {SebastianBergmann\PHPLOC\Analyser}
+ * Code originally taken from {SebastianBergmann\PHPLOC\Analyser}.
  *
  * @method string    getNamespaceName(array $tolens, int $i)
  * @method bool      isClassDeclaration(array $tokens, int $i)
- * @method int|bool  getPreviousNonWhitespaceTokenPos(array $tokens, $start)
- * @method int|bool  getNextNonWhitespaceTokenPos(array $tokens, $start)
+ * @method bool|int  getPreviousNonWhitespaceTokenPos(array $tokens, $start)
+ * @method bool|int  getNextNonWhitespaceTokenPos(array $tokens, $start)
  * @method string    getClassName(string $namespace, array $tokens, int $i)
  *
  * @internal
@@ -38,10 +40,22 @@ final class Analyser
     ];
 
     /**
+     * @param array<int|float|string[],int|float|string[]> $args
+     *
+     * @return float|int|string[]
+     */
+    public function __call(string $method, array $args)
+    {
+        $method = new ReflectionMethod(BaseAnalyser::class, $method);
+        $method->setAccessible(true);
+
+        return $method->invoke(new BaseAnalyser(), ...$args);
+    }
+
+    /**
      * Processes a set of files.
      *
-     * @param  string  $dir
-     * @param  string[]  $files
+     * @param string[] $files
      *
      * @return \NunoMaduro\PhpInsights\Domain\Collector
      */
@@ -61,10 +75,7 @@ final class Analyser
     /**
      * Processes a single file.
      *
-     * @param  \NunoMaduro\PhpInsights\Domain\Collector  $collector
-     * @param  string  $filename
-     *
-     * @return void
+     * @param \NunoMaduro\PhpInsights\Domain\Collector $collector
      */
     private function analyseFile(Collector $collector, string $filename): void
     {
@@ -85,7 +96,6 @@ final class Analyser
         $isInMethod = false;
 
         for ($i = 0; $i < $numTokens; $i++) {
-
             if (\is_string($tokens[$i])) {
                 $token = \trim($tokens[$i]);
 
@@ -96,22 +106,22 @@ final class Analyser
                         if ($functionName !== null) {
                             $collector->currentMethodIncrementLines();
                         }
-                    } else if ($functionName !== null) {
+                    } elseif ($functionName !== null) {
                         $collector->incrementFunctionLines();
                     }
 
                     $collector->incrementLogicalLines();
-                } else if ($token === '?') {
+                } elseif ($token === '?') {
                     if ($className !== null) {
                         $collector->currentClassIncrementComplexity();
                         $collector->currentMethodIncrementComplexity();
                     }
 
                     $collector->incrementComplexity();
-                } else if ($token === '{') {
+                } elseif ($token === '{') {
                     if ($currentBlock === \T_CLASS) {
                         $block = $className;
-                    } else if ($currentBlock === \T_FUNCTION) {
+                    } elseif ($currentBlock === \T_FUNCTION) {
                         $block = $functionName;
                     } else {
                         $block = false;
@@ -120,18 +130,17 @@ final class Analyser
                     \array_push($blocks, $block);
 
                     $currentBlock = false;
-                } else if ($token === '}') {
+                } elseif ($token === '}') {
                     $block = \array_pop($blocks);
 
                     if ($block !== false && $block !== null) {
                         if ($block === $functionName) {
-
                             if ($isInMethod) {
                                 $collector->currentMethodStop($functionName);
                                 $isInMethod = false;
                             }
                             $functionName = null;
-                        } else if ($block === $className) {
+                        } elseif ($block === $className) {
                             $className = null;
                             $collector->currentClassReset();
                         }
@@ -149,7 +158,6 @@ final class Analyser
                     $collector->addNamespace($namespace);
 
                     break;
-
                 case \T_CLASS:
                 case \T_INTERFACE:
                 case \T_TRAIT:
@@ -164,14 +172,14 @@ final class Analyser
 
                     if ($token === \T_TRAIT) {
                         $collector->incrementTraits();
-                    } else if ($token === \T_INTERFACE) {
+                    } elseif ($token === \T_INTERFACE) {
                         $collector->incrementInterfaces();
                     } else {
                         if (isset($tokens[$i - 2]) &&
                             \is_array($tokens[$i - 2])) {
                             if ($tokens[$i - 2][0] === \T_ABSTRACT) {
                                 $collector->addAbstractClass($filename);
-                            } else if ($tokens[$i - 2][0] === \T_FINAL) {
+                            } elseif ($tokens[$i - 2][0] === \T_FINAL) {
                                 $collector->addConcreteFinalClass($filename);
                             } else {
                                 $collector->addConcreteNonFinalClass($filename);
@@ -182,7 +190,6 @@ final class Analyser
                     }
 
                     break;
-
                 case \T_FUNCTION:
                     $prev = $this->getPreviousNonWhitespaceTokenPos($tokens, $i);
 
@@ -209,7 +216,7 @@ final class Analyser
 
                     if ($currentBlock === \T_FUNCTION) {
                         if ($className === null &&
-                            $functionName != 'anonymous function') {
+                            $functionName !== 'anonymous function') {
                             $collector->addNamedFunctions($functionName);
                         } else {
                             $static = false;
@@ -232,12 +239,10 @@ final class Analyser
                                             $visibility = \T_PRIVATE;
 
                                             break;
-
                                         case \T_PROTECTED:
                                             $visibility = \T_PROTECTED;
 
                                             break;
-
                                         case \T_STATIC:
                                             $static = true;
 
@@ -257,7 +262,7 @@ final class Analyser
 
                             if ($visibility === \T_PUBLIC) {
                                 $collector->incrementPublicMethods();
-                            } else if ($visibility === \T_PROTECTED) {
+                            } elseif ($visibility === \T_PROTECTED) {
                                 $collector->incrementProtectedMethods();
                             } else {
                                 $collector->incrementPrivateMethods();
@@ -266,19 +271,16 @@ final class Analyser
                     }
 
                     break;
-
                 case \T_CURLY_OPEN:
                     $currentBlock = \T_CURLY_OPEN;
                     \array_push($blocks, $currentBlock);
 
                     break;
-
                 case \T_DOLLAR_OPEN_CURLY_BRACES:
                     $currentBlock = \T_DOLLAR_OPEN_CURLY_BRACES;
                     \array_push($blocks, $currentBlock);
 
                     break;
-
                 case \T_IF:
                 case \T_ELSEIF:
                 case \T_FOR:
@@ -298,7 +300,6 @@ final class Analyser
                     $collector->incrementComplexity();
 
                     break;
-
                 case \T_COMMENT:
                 case \T_DOC_COMMENT:
                     $collector->incrementCommentLines(\substr_count(\rtrim($value, "\n"), "\n") + 1);
@@ -308,19 +309,16 @@ final class Analyser
                     $collector->incrementClassConstants();
 
                     break;
-
                 case \T_STRING:
                     if ($value === 'define'
-                        && $tokens[$i - 1][1] !== "::"
-                        && $tokens[$i - 1][1] !== "->"
+                        && $tokens[$i - 1][1] !== '::'
+                        && $tokens[$i - 1][1] !== '->'
                         && (! isset($tokens[$i - 2][1]) || $tokens[$i - 2][1] !== 'function')) {
-
                         $j = $i + 1;
 
-                        while (isset($tokens[$j]) && $tokens[$j] != ';') {
+                        while (isset($tokens[$j]) && $tokens[$j] !== ';') {
                             if (\is_array($tokens[$j]) &&
                                 $tokens[$j][0] === \T_CONSTANT_ENCAPSED_STRING) {
-
                                 $collector->addGlobalConstant(\str_replace('\'', '', $tokens[$j][1]));
 
                                 break;
@@ -333,7 +331,6 @@ final class Analyser
                     }
 
                     break;
-
                 case \T_DOUBLE_COLON:
                 case \T_OBJECT_OPERATOR:
                     $n = $this->getNextNonWhitespaceTokenPos($tokens, $i);
@@ -353,41 +350,25 @@ final class Analyser
                         if ($token === \T_DOUBLE_COLON &&
                             $tokens[$n][0] === \T_VARIABLE) {
                             $collector->incrementStaticAttributeAccesses();
-                        } else if ($token === \T_OBJECT_OPERATOR) {
+                        } elseif ($token === \T_OBJECT_OPERATOR) {
                             $collector->incrementNonStaticAttributeAccesses();
                         }
                     }
 
                     break;
-
                 case \T_GLOBAL:
                     $collector->incrementGlobalVariableAccesses();
 
                     break;
-
                 case \T_VARIABLE:
                     if ($value === '$GLOBALS') {
                         $collector->incrementGlobalVariableAccesses();
-                    } else if (isset(array_flip($this->superGlobals)[$value])) {
+                    } elseif (isset(array_flip($this->superGlobals)[$value])) {
                         $collector->incrementSuperGlobalVariableAccesses();
                     }
 
                     break;
             }
         }
-    }
-
-    /**
-     * @param  string  $method
-     * @param  array<int|float|string[],int|float|string[]>  $args
-     *
-     * @return int|float|string[]
-     */
-    public function __call(string $method, array $args)
-    {
-        $method = new ReflectionMethod(BaseAnalyser::class, $method);
-        $method->setAccessible(true);
-
-        return $method->invoke(new BaseAnalyser(), ...$args);
     }
 }

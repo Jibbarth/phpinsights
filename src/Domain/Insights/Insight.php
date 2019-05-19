@@ -15,15 +15,14 @@ abstract class Insight implements InsightContract
     protected $collector;
 
     /**
-     * @var array<string, string|int>
+     * @var array<string, int|string>
      */
     protected $config;
 
     /**
      * Creates an new instance of the Insight.
      *
-     * @param  \NunoMaduro\PhpInsights\Domain\Collector  $collector
-     * @param  array<string, string|int>  $config
+     * @param array<string, int|string> $config
      */
     final public function __construct(Collector $collector, array $config)
     {

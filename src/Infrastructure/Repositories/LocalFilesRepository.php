@@ -19,8 +19,6 @@ final class LocalFilesRepository implements FilesRepository
 
     /**
      * LocalFilesRepository constructor.
-     *
-     * @param  \Symfony\Component\Finder\Finder  $finder
      */
     public function __construct(Finder $finder)
     {

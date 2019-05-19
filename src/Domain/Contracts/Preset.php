@@ -11,24 +11,20 @@ interface Preset
 {
     /**
      * Returns the preset name.
-     *
-     * @return string
      */
     public static function getName(): string;
 
     /**
      * Returns the configuration preset.
      *
-     * @return array<string, string|int|array>
+     * @return array<string, array|int|string>
      */
     public static function get(): array;
 
     /**
      * Determinates if the preset should be applied.
      *
-     * @param  array<string, string|int|array>  $composer
-     *
-     * @return bool
+     * @param array<string, array|int|string> $composer
      */
     public static function shouldBeApplied(array $composer): bool;
 }

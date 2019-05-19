@@ -26,8 +26,7 @@ final class InsightCollection
     /**
      * Creates a new instance of the Insight Collection.
      *
-     * @param  \NunoMaduro\PhpInsights\Domain\Collector  $collector
-     * @param  array<string, array<\NunoMaduro\PhpInsights\Domain\Contracts\Insight>>  $insightsPerMetric
+     * @param array<string, array<\NunoMaduro\PhpInsights\Domain\Contracts\Insight>> $insightsPerMetric
      */
     public function __construct(Collector $collector, array $insightsPerMetric)
     {
@@ -35,9 +34,6 @@ final class InsightCollection
         $this->insightsPerMetric = $insightsPerMetric;
     }
 
-    /**
-     * @return \NunoMaduro\PhpInsights\Domain\Collector
-     */
     public function getCollector(): Collector
     {
         return $this->collector;
@@ -64,8 +60,6 @@ final class InsightCollection
     /**
      * Gets all insights from given metric.
      *
-     * @param  \NunoMaduro\PhpInsights\Domain\Contracts\Metric  $metric
-     *
      * @return \NunoMaduro\PhpInsights\Domain\Contracts\Insight[]
      */
     public function allFrom(Metric $metric): array
@@ -75,8 +69,6 @@ final class InsightCollection
 
     /**
      * Returns the results of the code taking in consideration the current insights.
-     *
-     * @return \NunoMaduro\PhpInsights\Domain\Results
      */
     public function results(): Results
     {
@@ -91,7 +83,8 @@ final class InsightCollection
             }
 
             $perCategory[$category] = array_merge(
-                $perCategory[$category], $insights
+                $perCategory[$category],
+                $insights
             );
         }
 

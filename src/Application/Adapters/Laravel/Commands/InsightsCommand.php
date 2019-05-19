@@ -36,6 +36,7 @@ final class InsightsCommand extends Command
 
         if (is_string($configPath) && ! file_exists($configPath)) {
             $this->output->error('First, publish the configuration using: php artisan vendor:publish');
+
             return 1;
         }
 

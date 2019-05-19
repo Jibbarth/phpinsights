@@ -32,9 +32,6 @@ final class Style extends SymfonyStyle
 
     /**
      * Style constructor.
-     *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
      */
     public function __construct(InputInterface $input, OutputInterface $output)
     {
@@ -42,12 +39,9 @@ final class Style extends SymfonyStyle
     }
 
     /**
-     * @param  \NunoMaduro\PhpInsights\Domain\Results  $results
-     * @param  string  $dir
-     *
      * @return \NunoMaduro\PhpInsights\Application\Console\Style
      */
-    public function header(Results $results, string $dir): Style
+    public function header(Results $results, string $dir): self
     {
         $this->newLine(2);
 
@@ -67,30 +61,28 @@ final class Style extends SymfonyStyle
         $style = self::getPercentageAsString($results->getStyle());
 
         $output = <<<EOD
-      <$codeQualityColor>         </>            <$complexityColor>         </>            <$structureColor>         </>            <$styleColor>         </>
-      <fg=black;options=bold;$codeQualityColor>  {$codeQuality}  </>            <fg=black;options=bold;$complexityColor>  {$complexity}  </>            <fg=black;options=bold;$structureColor>  {$structure}  </>            <fg=black;options=bold;$styleColor>  {$style}  </>
-      <$codeQualityColor>         </>            <$complexityColor>         </>            <$structureColor>         </>            <$styleColor>         </>
+      <{$codeQualityColor}>         </>            <{$complexityColor}>         </>            <{$structureColor}>         </>            <{$styleColor}>         </>
+      <fg=black;options=bold;{$codeQualityColor}>  {$codeQuality}  </>            <fg=black;options=bold;{$complexityColor}>  {$complexity}  </>            <fg=black;options=bold;{$structureColor}>  {$structure}  </>            <fg=black;options=bold;{$styleColor}>  {$style}  </>
+      <{$codeQualityColor}>         </>            <{$complexityColor}>         </>            <{$structureColor}>         </>            <{$styleColor}>         </>
 
-        <$subtitle>Code</>               <$subtitle>Complexity</>          <$subtitle>Architecture</>            <$subtitle>Style</>
+        <{$subtitle}>Code</>               <{$subtitle}>Complexity</>          <{$subtitle}>Architecture</>            <{$subtitle}>Style</>
 EOD;
         $this->write($output);
         $this->newLine(2);
 
-        $this->writeln("Score scale: <fg=red>◼</> 1-49 <fg=yellow>◼</> 50-79 <fg=green>◼</> 80-100");
+        $this->writeln('Score scale: <fg=red>◼</> 1-49 <fg=yellow>◼</> 50-79 <fg=green>◼</> 80-100');
 
         return $this;
     }
 
     /**
-     * @param  \NunoMaduro\PhpInsights\Domain\Insights\InsightCollection  $insightCollection
-     * @param  \NunoMaduro\PhpInsights\Domain\Results  $results
-     *
      * @return \NunoMaduro\PhpInsights\Application\Console\Style
      */
-    public function code(InsightCollection $insightCollection, Results $results): Style
+    public function code(InsightCollection $insightCollection, Results $results): self
     {
         $this->newLine();
-        $this->writeln(sprintf("[CODE] %s within <title>%s</> lines",
+        $this->writeln(sprintf(
+            '[CODE] %s within <title>%s</> lines',
             "<fg={$this->getColor($results->getCodeQuality())};options=bold>{$results->getCodeQuality()} pts</>",
             (new Code\Code())->getValue($insightCollection->getCollector())
         ));
@@ -108,7 +100,8 @@ EOD;
 
             $takenSize = strlen($name . $percentage);
 
-            $this->writeln(sprintf('%s %s %s %%',
+            $this->writeln(sprintf(
+                '%s %s %s %%',
                 $name,
                 str_repeat('.', 70 - $takenSize),
                 $percentage
@@ -118,18 +111,15 @@ EOD;
         return $this;
     }
 
-
     /**
-     * @param  \NunoMaduro\PhpInsights\Domain\Insights\InsightCollection  $insightCollection
-     * @param  \NunoMaduro\PhpInsights\Domain\Results  $results
-     *
      * @return \NunoMaduro\PhpInsights\Application\Console\Style
      */
-    public function complexity(InsightCollection $insightCollection, Results $results): Style
+    public function complexity(InsightCollection $insightCollection, Results $results): self
     {
         $this->newLine();
 
-        $this->writeln(sprintf("[COMPLEXITY] %s with average of <title>%s</> cyclomatic complexity",
+        $this->writeln(sprintf(
+            '[COMPLEXITY] %s with average of <title>%s</> cyclomatic complexity',
             "<fg={$this->getColor($results->getComplexity())};options=bold>{$results->getComplexity()} pts</>",
             (new Complexity\Complexity())->getAvg($insightCollection->getCollector())
         ));
@@ -138,16 +128,14 @@ EOD;
     }
 
     /**
-     * @param  \NunoMaduro\PhpInsights\Domain\Insights\InsightCollection  $insightCollection
-     * @param  \NunoMaduro\PhpInsights\Domain\Results  $results
-     *
      * @return \NunoMaduro\PhpInsights\Application\Console\Style
      */
-    public function architecture(InsightCollection $insightCollection, Results $results): Style
+    public function architecture(InsightCollection $insightCollection, Results $results): self
     {
         $this->newLine();
 
-        $this->writeln(sprintf("[ARCHITECTURE] %s within <title>%s</> files",
+        $this->writeln(sprintf(
+            '[ARCHITECTURE] %s within <title>%s</> files',
             "<fg={$this->getColor($results->getStructure())};options=bold>{$results->getStructure()} pts</>",
             (new Architecture\Files())->getValue($insightCollection->getCollector())
         ));
@@ -166,7 +154,8 @@ EOD;
 
             $takenSize = strlen($name . $percentage);
 
-            $this->writeln(sprintf('%s %s %s %%',
+            $this->writeln(sprintf(
+                '%s %s %s %%',
                 $name,
                 str_repeat('.', 70 - $takenSize),
                 $percentage
@@ -177,17 +166,16 @@ EOD;
     }
 
     /**
-     * @param  \NunoMaduro\PhpInsights\Domain\Results  $results
-     *
      * @return \NunoMaduro\PhpInsights\Application\Console\Style
      */
-    public function misc(Results $results): Style
+    public function misc(Results $results): self
     {
         $this->newLine();
 
         $totalSecurityIssuesColor = $results->getTotalSecurityIssues() === 0 ? 'green' : 'red';
 
-        $this->writeln(sprintf("[MISC] %s on coding style and %s encountered",
+        $this->writeln(sprintf(
+            '[MISC] %s on coding style and %s encountered',
             "<fg={$this->getColor($results->getStyle())};options=bold>{$results->getStyle()} pts</>",
             "<fg={$totalSecurityIssuesColor};options=bold>{$results->getTotalSecurityIssues()} security issues</>"
         ));
@@ -198,13 +186,11 @@ EOD;
     /**
      * Describes the issues from the given metrics.
      *
-     * @param  \NunoMaduro\PhpInsights\Domain\Insights\InsightCollection  $insightCollection
-     * @param  string[]  $metrics
-     * @param  string  $dir
+     * @param string[] $metrics
      *
      * @return \NunoMaduro\PhpInsights\Application\Console\Style
      */
-    public function issues(InsightCollection $insightCollection, array $metrics, string $dir): Style
+    public function issues(InsightCollection $insightCollection, array $metrics, string $dir): self
     {
         $previousCategory = null;
 
@@ -223,10 +209,11 @@ EOD;
 
                 $previousCategory = $category;
 
-                $issue = "\n<fg=red>•</> [$category] <bold>{$insight->getTitle()}</bold>";
+                $issue = "\n<fg=red>•</> [{$category}] <bold>{$insight->getTitle()}</bold>";
 
                 if (! $insight instanceof HasDetails) {
                     $this->writeln($issue);
+
                     continue;
                 }
                 $issue .= ':';
@@ -239,7 +226,7 @@ EOD;
 
                 foreach ($details as $detail) {
                     $detail = str_replace(realpath($dir) . '/', '', $detail);
-                    $issue .= "\n  $detail";
+                    $issue .= "\n  {$detail}";
                 }
 
                 if ($this->output->getVerbosity() <= OutputInterface::VERBOSITY_NORMAL && $totalDetails > 3) {
@@ -258,11 +245,9 @@ EOD;
     /**
      * Waits for Enter key.
      *
-     * @param  string  $category
-     *
      * @return \NunoMaduro\PhpInsights\Application\Console\Style
      */
-    public function waitForKey(string $category): Style
+    public function waitForKey(string $category): self
     {
         $stdin = fopen('php://stdin', 'r');
 
@@ -279,10 +264,6 @@ EOD;
 
     /**
      * Returns the percentage as 5 chars string.
-     *
-     * @param  float  $percentage
-     *
-     * @return string
      */
     private static function getPercentageAsString(float $percentage): string
     {
@@ -295,10 +276,6 @@ EOD;
 
     /**
      * Returns the color for the given percentage.
-     *
-     * @param  float  $percentage
-     *
-     * @return string
      */
     private function getColor(float $percentage): string
     {

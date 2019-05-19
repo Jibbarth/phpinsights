@@ -13,8 +13,6 @@ interface FilesRepository extends CustomSourceProviderInterface
 {
     /**
      * Get the default repository.
-     *
-     * @return string
      */
     public function getDefaultDirectory(): string;
 
@@ -28,10 +26,9 @@ interface FilesRepository extends CustomSourceProviderInterface
     /**
      * Sets the current files dirs.
      *
-     * @param  string  $dir
-     * @param  string[]  $exclude
+     * @param string[] $exclude
      *
      * @return \NunoMaduro\PhpInsights\Domain\Contracts\Repositories\FilesRepository
      */
-    public function within(string $dir, array $exclude): FilesRepository;
+    public function within(string $dir, array $exclude): self;
 }

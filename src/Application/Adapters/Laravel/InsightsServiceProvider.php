@@ -14,7 +14,7 @@ use NunoMaduro\PhpInsights\Application\Injectors\Repositories;
 final class InsightsServiceProvider extends ServiceProvider
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function register(): void
     {
@@ -24,7 +24,7 @@ final class InsightsServiceProvider extends ServiceProvider
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function boot(): void
     {

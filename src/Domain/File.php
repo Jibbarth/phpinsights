@@ -70,14 +70,6 @@ final class File extends BaseFile
 
     /**
      * File constructor.
-     *
-     * @param  string  $path
-     * @param  string  $content
-     * @param  \PHP_CodeSniffer\Fixer  $fixer
-     * @param  \Symplify\EasyCodingStandard\Error\ErrorAndDiffCollector  $errorAndDiffCollector
-     * @param  \Symplify\EasyCodingStandard\Skipper  $skipper
-     * @param  \Symplify\EasyCodingStandard\Application\AppliedCheckersCollector  $appliedCheckersCollector
-     * @param  \Symplify\EasyCodingStandard\Console\Style\EasyCodingStandardStyle  $easyCodingStandardStyle
      */
     public function __construct(
         string $path,
@@ -87,8 +79,7 @@ final class File extends BaseFile
         Skipper $skipper,
         AppliedCheckersCollector $appliedCheckersCollector,
         EasyCodingStandardStyle $easyCodingStandardStyle
-    )
-    {
+    ) {
         $this->path = $path;
         $this->content = $content;
         $this->fixer = $fixer;
@@ -162,7 +153,7 @@ final class File extends BaseFile
     }
 
     /**
-     * @param  Sniff[][]  $tokenListeners
+     * @param Sniff[][] $tokenListeners
      */
     public function processWithTokenListenersAndFileInfo(array $tokenListeners, SmartFileInfo $fileInfo): void
     {
@@ -183,8 +174,7 @@ final class File extends BaseFile
         $data,
         $severity,
         $isFixable = false
-    ): bool
-    {
+    ): bool {
         $message = count($data) > 0 ? vsprintf($message, $data) : $message;
 
         $this->errorAndDiffCollector->addErrorMessage(
@@ -197,9 +187,6 @@ final class File extends BaseFile
         return true;
     }
 
-    /**
-     * @param  Sniff  $sniff
-     */
     private function reportActiveSniffClass(Sniff $sniff): void
     {
         // used in other places later
@@ -217,11 +204,6 @@ final class File extends BaseFile
         $this->previousActiveSniffClass = $this->activeSniffClass;
     }
 
-    /**
-     * @param  string  $sniffClassOrCode
-     *
-     * @return string
-     */
     private function resolveFullyQualifiedCode(string $sniffClassOrCode): string
     {
         if (class_exists($sniffClassOrCode)) {

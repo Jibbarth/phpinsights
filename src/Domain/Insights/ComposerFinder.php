@@ -9,11 +9,6 @@ use NunoMaduro\PhpInsights\Domain\Exceptions\ComposerNotFound;
 
 final class ComposerFinder
 {
-    /**
-     * @param  \NunoMaduro\PhpInsights\Domain\Collector  $collector
-     *
-     * @return string
-     */
     public static function contents(Collector $collector): string
     {
         $filePath = $collector->getDir() . '/composer.json';

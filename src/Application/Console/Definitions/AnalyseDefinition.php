@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputOption;
 final class AnalyseDefinition
 {
     /**
-     * @return array<int, \Symfony\Component\Console\Input\InputOption|\Symfony\Component\Console\Input\InputArgument>
+     * @return array<int, \Symfony\Component\Console\Input\InputArgument|\Symfony\Component\Console\Input\InputOption>
      */
     public static function get(): array
     {

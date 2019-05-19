@@ -18,9 +18,7 @@ final class InvokableCommand extends BaseCommand
     /**
      * Creates a new instance of the Invokable Command.
      *
-     * @param  string  $name
-     * @param  callable  $callable
-     * @param  array<int, \Symfony\Component\Console\Input\InputArgument|\Symfony\Component\Console\Input\InputOption>  $definition
+     * @param array<int, \Symfony\Component\Console\Input\InputArgument|\Symfony\Component\Console\Input\InputOption> $definition
      */
     public function __construct(string $name, callable $callable, array $definition)
     {

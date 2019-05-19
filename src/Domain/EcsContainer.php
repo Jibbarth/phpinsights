@@ -16,9 +16,6 @@ final class EcsContainer
      */
     private static $container;
 
-    /**
-     * @return \Symfony\Component\DependencyInjection\Container
-     */
     public static function make(): Container
     {
         if (self::$container === null) {

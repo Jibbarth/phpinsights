@@ -27,7 +27,6 @@ final class ForbiddenDefineGlobalConstants extends Insight implements HasDetails
         return 'Define `globals` is prohibited';
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -39,7 +38,7 @@ final class ForbiddenDefineGlobalConstants extends Insight implements HasDetails
         $globalConstants = array_diff($this->collector->getGlobalConstants(), $ignore);
 
         return array_map(static function ($file, $constant) {
-            return "$file: $constant";
+            return "{$file}: {$constant}";
         }, array_keys($globalConstants), $globalConstants);
     }
 }
