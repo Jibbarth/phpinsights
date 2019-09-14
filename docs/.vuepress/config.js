@@ -20,6 +20,7 @@ module.exports = {
           '/insights/style',
         ]
       },
+      '/ide',
       '/contribute',
       '/support',
       '/changelog'
