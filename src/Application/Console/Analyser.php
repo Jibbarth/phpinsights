@@ -52,6 +52,10 @@ final class Analyser
         $insightCollection = $this->insightCollectionFactory
             ->get($metrics, $config, $dir, $consoleOutput);
 
+        if (method_exists($formatter, 'setFileLinkFormatter')) {
+            $formatter->setFileLinkFormatter($config['fileLinkFormatter']);
+        }
+
         $formatter->format($insightCollection, $dir, $metrics);
 
         return $insightCollection->results();

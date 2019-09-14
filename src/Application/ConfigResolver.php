@@ -9,8 +9,11 @@ use NunoMaduro\PhpInsights\Application\Adapters\Laravel\Preset as LaravelPreset;
 use NunoMaduro\PhpInsights\Application\Adapters\Magento2\Preset as Magento2Preset;
 use NunoMaduro\PhpInsights\Application\Adapters\Symfony\Preset as SymfonyPreset;
 use NunoMaduro\PhpInsights\Application\Adapters\Yii\Preset as YiiPreset;
+use NunoMaduro\PhpInsights\Domain\Contracts\FileLinkFormatter as FileLinkFormatterContract;
 use NunoMaduro\PhpInsights\Domain\Contracts\Preset;
 use NunoMaduro\PhpInsights\Domain\Exceptions\PresetNotFound;
+use NunoMaduro\PhpInsights\Domain\LinkFormatter\FileLinkFormatter;
+use NunoMaduro\PhpInsights\Domain\LinkFormatter\NullFileLinkFormatter;
 
 /**
  * @internal
@@ -39,6 +42,9 @@ final class ConfigResolver
      */
     public static function resolve(array $config, string $directory): array
     {
+        $config['fileLinkFormatter'] = self::resolveIde($config);
+        unset($config['ide']);
+
         /** @var string $preset */
         $preset = $config['preset'] ?? self::guess($directory);
 
@@ -108,5 +114,35 @@ final class ConfigResolver
         }
 
         return $base;
+    }
+
+    /**
+     * @param array<string, string|int|array> $config
+     */
+    private static function resolveIde(array $config): FileLinkFormatterContract
+    {
+        $links = [
+            'textmate' => 'txmt://open?url=file://%f&line=%l',
+            'macvim' => 'mvim://open?url=file://%f&line=%l',
+            'emacs' => 'emacs://open?url=file://%f&line=%l',
+            'sublime' => 'subl://open?url=file://%f&line=%l',
+            'phpstorm' => 'phpstorm://open?file=%f&line=%l',
+            'atom' => 'atom://core/open/file?filename=%f&line=%l',
+            'vscode' => 'vscode://file/%f:%l',
+        ];
+
+        $ide = $config['ide'] ?? null;
+
+        $fileFormatterPattern = ini_get('xdebug.file_link_format') ?:
+            get_cfg_var('xdebug.file_link_format') ?:
+            (isset($links[$ide]) ? $links[$ide] : $ide);
+
+        $fileLinkFormatter = new NullFileLinkFormatter();
+
+        if (null !== $fileFormatterPattern) {
+            $fileLinkFormatter = new FileLinkFormatter($fileFormatterPattern);
+        }
+
+        return $fileLinkFormatter;
     }
 }
