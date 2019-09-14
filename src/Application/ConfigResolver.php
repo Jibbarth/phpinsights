@@ -133,13 +133,27 @@ final class ConfigResolver
 
         $ide = $config['ide'] ?? null;
 
-        $fileFormatterPattern = ini_get('xdebug.file_link_format') ?:
-            get_cfg_var('xdebug.file_link_format') ?:
-            (isset($links[$ide]) ? $links[$ide] : $ide);
+        if ($ide !== null && ! is_string($ide)) {
+            throw new \LogicException('ide config must be a string');
+        }
+
+        if (
+            $ide !== null &&
+            isset($links[$ide]) === false &&
+            mb_strpos((string) $ide, '://') === false
+        ) {
+            throw new \LogicException(sprintf(
+                'Unknow IDE "%s". Try one in this list [%s] or provide pattern link handler',
+                $ide,
+                implode(', ', array_keys($links))
+            ));
+        }
+
+        $fileFormatterPattern = $links[$ide] ?? $ide;
 
         $fileLinkFormatter = new NullFileLinkFormatter();
 
-        if (null !== $fileFormatterPattern) {
+        if ($fileFormatterPattern !== null) {
             $fileLinkFormatter = new FileLinkFormatter($fileFormatterPattern);
         }
 
