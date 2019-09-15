@@ -151,12 +151,8 @@ final class ConfigResolver
 
         $fileFormatterPattern = $links[$ide] ?? $ide;
 
-        $fileLinkFormatter = new NullFileLinkFormatter();
-
-        if ($fileFormatterPattern !== null) {
-            $fileLinkFormatter = new FileLinkFormatter($fileFormatterPattern);
-        }
-
-        return $fileLinkFormatter;
+        return $fileFormatterPattern === null ?
+            new NullFileLinkFormatter() :
+            new FileLinkFormatter($fileFormatterPattern);
     }
 }
