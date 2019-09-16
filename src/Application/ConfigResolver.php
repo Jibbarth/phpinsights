@@ -9,6 +9,7 @@ use NunoMaduro\PhpInsights\Application\Adapters\Laravel\Preset as LaravelPreset;
 use NunoMaduro\PhpInsights\Application\Adapters\Magento2\Preset as Magento2Preset;
 use NunoMaduro\PhpInsights\Application\Adapters\Symfony\Preset as SymfonyPreset;
 use NunoMaduro\PhpInsights\Application\Adapters\Yii\Preset as YiiPreset;
+use NunoMaduro\PhpInsights\Domain\Configuration;
 use NunoMaduro\PhpInsights\Domain\Contracts\FileLinkFormatter as FileLinkFormatterContract;
 use NunoMaduro\PhpInsights\Domain\Contracts\Preset;
 use NunoMaduro\PhpInsights\Domain\Exceptions\PresetNotFound;
@@ -40,22 +41,20 @@ final class ConfigResolver
      *
      * @return array<string, array>
      */
-    public static function resolve(array $config, string $directory): array
+    public static function resolve(array $config, string $directory): Configuration
     {
-        $config['fileLinkFormatter'] = self::resolveIde($config);
-        unset($config['ide']);
-
         /** @var string $preset */
         $preset = $config['preset'] ?? self::guess($directory);
 
         /** @var Preset $presetClass */
         foreach (self::$presets as $presetClass) {
             if ($presetClass::getName() === $preset) {
-                return self::mergeConfig($presetClass::get(), $config);
+                $config = self::mergeConfig($presetClass::get(), $config);
+                break;
             }
         }
 
-        throw new PresetNotFound(sprintf('%s not found', $preset));
+        return new Configuration($config);
     }
 
     /**
@@ -114,45 +113,5 @@ final class ConfigResolver
         }
 
         return $base;
-    }
-
-    /**
-     * @param array<string, string|int|array> $config
-     */
-    private static function resolveIde(array $config): FileLinkFormatterContract
-    {
-        $links = [
-            'textmate' => 'txmt://open?url=file://%f&line=%l',
-            'macvim' => 'mvim://open?url=file://%f&line=%l',
-            'emacs' => 'emacs://open?url=file://%f&line=%l',
-            'sublime' => 'subl://open?url=file://%f&line=%l',
-            'phpstorm' => 'phpstorm://open?file=%f&line=%l',
-            'atom' => 'atom://core/open/file?filename=%f&line=%l',
-            'vscode' => 'vscode://file/%f:%l',
-        ];
-
-        $ide = $config['ide'] ?? null;
-
-        if ($ide !== null && ! is_string($ide)) {
-            throw new \LogicException('ide config must be a string');
-        }
-
-        if (
-            $ide !== null &&
-            isset($links[$ide]) === false &&
-            mb_strpos((string) $ide, '://') === false
-        ) {
-            throw new \LogicException(sprintf(
-                'Unknow IDE "%s". Try one in this list [%s] or provide pattern link handler',
-                $ide,
-                implode(', ', array_keys($links))
-            ));
-        }
-
-        $fileFormatterPattern = $links[$ide] ?? $ide;
-
-        return $fileFormatterPattern === null ?
-            new NullFileLinkFormatter() :
-            new FileLinkFormatter($fileFormatterPattern);
     }
 }
