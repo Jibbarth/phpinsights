@@ -6,7 +6,7 @@ namespace NunoMaduro\PhpInsights\Domain\Insights\Composer;
 
 use Composer\IO\NullIO;
 use Composer\Util\ConfigValidator;
-use NunoMaduro\PhpInsights\Domain\ComposerFinder;
+use NunoMaduro\PhpInsights\Domain\Composer\ComposerFinder;
 use NunoMaduro\PhpInsights\Domain\Contracts\HasDetails;
 use NunoMaduro\PhpInsights\Domain\Details;
 use NunoMaduro\PhpInsights\Domain\Insights\Insight;

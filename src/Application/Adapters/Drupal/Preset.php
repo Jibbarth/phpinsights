@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace NunoMaduro\PhpInsights\Application\Adapters\Drupal;
 
-use NunoMaduro\PhpInsights\Application\Composer;
 use NunoMaduro\PhpInsights\Application\ConfigResolver;
 use NunoMaduro\PhpInsights\Application\DefaultPreset;
+use NunoMaduro\PhpInsights\Domain\Composer\Composer;
 use NunoMaduro\PhpInsights\Domain\Contracts\Preset as PresetContract;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\ForbiddenFunctionsSniff;
 

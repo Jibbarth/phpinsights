@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\PhpInsights\Domain;
+namespace NunoMaduro\PhpInsights\Domain\Composer;
 
 use Composer\Composer;
 use Composer\Factory;
 use Composer\IO\NullIO;
+use NunoMaduro\PhpInsights\Domain\Collector;
 
 /**
  * @internal

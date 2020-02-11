@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace NunoMaduro\PhpInsights\Domain\Contracts;
 
-use NunoMaduro\PhpInsights\Application\Composer;
+use NunoMaduro\PhpInsights\Domain\Composer\Composer;
 
 /**
  * @internal
@@ -21,7 +21,7 @@ interface Preset
     /**
      * Returns the configuration preset.
      *
-     * @param \NunoMaduro\PhpInsights\Application\Composer $composer
+     * @param \NunoMaduro\PhpInsights\Domain\Composer\Composer $composer
      *
      * @return array<string, string|int|array>
      */
@@ -30,7 +30,7 @@ interface Preset
     /**
      * Determinates if the preset should be applied.
      *
-     * @param \NunoMaduro\PhpInsights\Application\Composer $composer
+     * @param \NunoMaduro\PhpInsights\Domain\Composer\Composer $composer
      *
      * @return bool
      */

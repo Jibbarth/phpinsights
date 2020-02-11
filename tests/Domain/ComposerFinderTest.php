@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Domain;
 
 use NunoMaduro\PhpInsights\Domain\Collector;
-use NunoMaduro\PhpInsights\Domain\ComposerFinder;
+use NunoMaduro\PhpInsights\Domain\Composer\ComposerFinder;
 use NunoMaduro\PhpInsights\Domain\Exceptions\ComposerNotFound;
 use PHPUnit\Framework\TestCase;
 

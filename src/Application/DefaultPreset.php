@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace NunoMaduro\PhpInsights\Application;
 
+use NunoMaduro\PhpInsights\Domain\Composer\Composer;
 use NunoMaduro\PhpInsights\Domain\Contracts\Preset as PresetContract;
 use SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff;
 use SlevomatCodingStandard\Sniffs\Namespaces\UnusedUsesSniff;

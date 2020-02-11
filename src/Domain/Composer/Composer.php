@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\PhpInsights\Application;
+namespace NunoMaduro\PhpInsights\Domain\Composer;
 
 use Composer\Semver\Semver;
 
@@ -58,6 +58,14 @@ final class Composer
     public function hasPhpVersion(): bool
     {
         return isset($this->getRequirements()['php']);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getManifest(): array
+    {
+        return $this->config;
     }
 
     public function lowestPhpVersionIsGreaterThenOrEqualTo(string $version): bool

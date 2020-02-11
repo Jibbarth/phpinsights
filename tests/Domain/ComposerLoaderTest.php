@@ -6,7 +6,7 @@ namespace Tests\Domain;
 
 use Composer\Composer;
 use NunoMaduro\PhpInsights\Domain\Collector;
-use NunoMaduro\PhpInsights\Domain\ComposerLoader;
+use NunoMaduro\PhpInsights\Domain\Composer\ComposerLoader;
 use NunoMaduro\PhpInsights\Domain\Exceptions\ComposerNotFound;
 use PHPUnit\Framework\TestCase;
 

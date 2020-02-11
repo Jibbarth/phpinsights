@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\PhpInsights\Domain;
+namespace NunoMaduro\PhpInsights\Domain\Composer;
 
+use NunoMaduro\PhpInsights\Domain\Collector;
 use NunoMaduro\PhpInsights\Domain\Exceptions\ComposerNotFound;
 
 final class ComposerFinder
 {
     /**
-     * @param  \NunoMaduro\PhpInsights\Domain\Collector  $collector
+     * @param \NunoMaduro\PhpInsights\Domain\Collector $collector
      *
      * @return string
      */

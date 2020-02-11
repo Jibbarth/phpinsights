@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace NunoMaduro\PhpInsights\Domain\Insights\Composer;
 
-use NunoMaduro\PhpInsights\Domain\ComposerLoader;
+use NunoMaduro\PhpInsights\Domain\Composer\ComposerLoader;
 use NunoMaduro\PhpInsights\Domain\Contracts\HasDetails;
 use NunoMaduro\PhpInsights\Domain\Details;
 use NunoMaduro\PhpInsights\Domain\Exceptions\ComposerNotFound;

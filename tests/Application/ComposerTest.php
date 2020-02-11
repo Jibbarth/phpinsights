@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Application;
 
-use NunoMaduro\PhpInsights\Application\Composer;
+use NunoMaduro\PhpInsights\Domain\Composer\Composer;
 use Tests\TestCase;
 
 final class ComposerTest extends TestCase
