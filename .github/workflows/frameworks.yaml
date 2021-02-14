@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - master
+            - framework-build
     pull_request: ~
 
 jobs:
@@ -48,16 +49,17 @@ jobs:
             - name: Linking library
               working-directory: ./project
               run: |
-                composer config repositories.phpinsights '{"type":"path", "url": "../phpinsights/", "options":{"symlink": false}}'
+                  composer config repositories.phpinsights '{"type":"path", "url": "../phpinsights/", "options":{"symlink": false}}'
               continue-on-error: ${{ env.allow_failure == 'true' }}
             - name: Composer config
               working-directory: ./project
               run: |
                   composer config prefer-stable true
+                  composer config minimum-stability dev
               continue-on-error: ${{ env.allow_failure == 'true' }}
             - name: Install PHPInsights
               working-directory: ./project
-              run: composer require --dev nunomaduro/phpinsights:"dev-${GITHUB_SHA}" -n --ansi
+              run: composer require --dev "nunomaduro/phpinsights:*" -n --ansi
               continue-on-error: ${{ env.allow_failure == 'true' }}
             - name: Launch PHPInsights
               working-directory: ./project
@@ -114,6 +116,7 @@ jobs:
               working-directory: ./project
               run: |
                   composer config prefer-stable true
+                  composer config minimum-stability dev
               continue-on-error: ${{ env.allow_failure == 'true' }}
             - name: Require phpunit:^9
               working-directory: ./project
@@ -121,7 +124,7 @@ jobs:
               continue-on-error: ${{ env.allow_failure == 'true' }}
             - name: Install PHPInsights
               working-directory: ./project
-              run: composer require --dev nunomaduro/phpinsights:"dev-${GITHUB_SHA}" -n --ansi
+              run: composer require --dev "nunomaduro/phpinsights:*" -n --ansi
               continue-on-error: ${{ env.allow_failure == 'true' }}
             - name: Artisan publish
               working-directory: ./project
